@@ -13,8 +13,11 @@ RUN npm install --ignore-scripts -g pnpm && \
 # Production stage
 FROM base AS production
 RUN apk add --no-cache curl
-COPY --from=builder ./docker/web-app/health-check.sh ./
 WORKDIR /app
+
+# Copy built artifacts from builder
+COPY --from=builder /app/apps/web-app/.output .
+COPY docker/web-app/health-check.sh ./
 
 # Running as non-root is a security best practice
 # Make the Health check script executable
