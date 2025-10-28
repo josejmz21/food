@@ -16,6 +16,7 @@ RUN apk add --no-cache curl
 WORKDIR /app
 
 # Copy built artifacts from builder
+SET pwd
 COPY --from=builder /app/apps/web-app/.output .
 COPY docker/web-app/health-check.sh ./
 
