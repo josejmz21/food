@@ -16,8 +16,7 @@ RUN apk add --no-cache curl
 WORKDIR /app
 
 # Copy built artifacts from builder
-COPY --from=builder /app/health-check.sh ./
-COPY docker/web-app/health-check.sh ./
+COPY ./app/docker/web-app/health-check.sh ./
 
 # Running as non-root is a security best practice
 # Make the Health check script executable
