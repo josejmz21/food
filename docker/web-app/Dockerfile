@@ -1,5 +1,6 @@
 FROM node:22.21.0-alpine AS base
-
+CMD echo "Hello, world!
+CMD pwd
 # Builder stage
 FROM base AS builder
 WORKDIR /app
