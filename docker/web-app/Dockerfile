@@ -6,8 +6,6 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages ./packages
 COPY apps/web-app ./apps/web-app
-# AÑADE ESTA LÍNEA: Copiar el health-check.sh durante la etapa de builder
-COPY docker/web-app/health-check.sh ./docker/web-app/
 RUN npm install --ignore-scripts -g pnpm && \
     pnpm i --frozen-lockfile && \
     pnpm build --filter @nextorders/web-app
@@ -18,9 +16,8 @@ RUN apk add --no-cache curl
 WORKDIR /app
 
 # Copy built artifacts from builder
-COPY --from=builder /app/apps/web-app/.output ./
-# CORREGIDO: Copiar desde la etapa builder donde ya existe el archivo
-COPY --from=builder /app/docker/web-app/health-check.sh ./
+COPY --from=builder /app/apps/web-app/.output .
+COPY docker/web-app/health-check.sh ./
 
 # Running as non-root is a security best practice
 # Make the Health check script executable
@@ -43,7 +40,7 @@ EXPOSE 3000
 
 # Health check using exec form
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s \
-    CMD ["./health-check.sh"]
+    CMD ["health-check.sh"]
 
 # Run the application
 ENTRYPOINT ["node"]
