@@ -17,7 +17,7 @@ WORKDIR /app
 
 # Copy built artifacts from builder
 COPY --from=builder /app/apps/web-app/.output .
-COPY docker/web-app/health-check.sh ./
+COPY --from=builder /docker/web-app/health-check.sh ./
 
 # Running as non-root is a security best practice
 # Make the Health check script executable
