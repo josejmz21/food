@@ -5,7 +5,7 @@ FROM base AS builder
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages ./packages
-COPY apps/web-app ./app/apps/web-app
+COPY ./app/apps/web-app ./apps/web-app
 RUN npm install --ignore-scripts -g pnpm && \
     pnpm i --frozen-lockfile && \
     pnpm build --filter @nextorders/web-app
