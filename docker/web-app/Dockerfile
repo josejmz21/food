@@ -6,7 +6,6 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages ./packages
 COPY apps/web-app ./apps/web-app
-COPY docker/web-app/health-check.sh ./docker/web-app/
 RUN npm install --ignore-scripts -g pnpm && \
     pnpm i --frozen-lockfile && \
     pnpm build --filter @nextorders/web-app
@@ -14,6 +13,7 @@ RUN npm install --ignore-scripts -g pnpm && \
 # Production stage
 FROM base AS production
 RUN apk add --no-cache curl
+COPY --from=builder ./docker/web-app/health-check.sh ./
 WORKDIR /app
 
 # Running as non-root is a security best practice
